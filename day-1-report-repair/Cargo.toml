@@ -1,5 +1,5 @@
 [package]
-name = "report-repair"
+name = "day-1-report-repair"
 version = "0.1.0"
 authors = ["fanciful-marmot <daniel.crookston@gmail.com>"]
 edition = "2018"
