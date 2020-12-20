@@ -12,7 +12,7 @@ struct Bag {
     pub eventually_contains_shiny: Option<bool>,
 }
 
-fn contains_shiny<'a>(bags: &mut HashMap<String, Bag>, id: &str) -> bool {
+fn contains_shiny(bags: &mut HashMap<String, Bag>, id: &str) -> bool {
     let bag = bags.get_mut(id).unwrap();
     let contents = bag.contents.clone(); // Have to clone to satisfy borrow checker
     let eventually_contains_shiny = bag.eventually_contains_shiny;
