@@ -63,7 +63,7 @@ fn part_1(contents: &str, preamble_len: usize) -> u64 {
         .unwrap()
 }
 
-fn part_2(contents: &str, preamble_len: usize, invalid_num: u64) -> (u64, u64) {
+fn part_2(contents: &str, invalid_num: u64) -> (u64, u64) {
     let buffer: Vec<u64> = contents
         .lines()
         .map(|line| line.parse::<u64>().unwrap())
@@ -111,6 +111,6 @@ fn main() {
 
     println!("part 1: {}", invalid_num);
 
-    let range = part_2(&contents, preamble_len, invalid_num);
+    let range = part_2(&contents, invalid_num);
     println!("part 2: {:?} {}", range, range.0 + range.1);
 }
