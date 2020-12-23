@@ -102,7 +102,7 @@ impl Plane {
         occupied
     }
 
-    pub fn tick(&mut self) -> bool {
+    pub fn tick_part1(&mut self) -> bool {
         // Track if anything changed
         let mut change = false;
 
@@ -113,23 +113,40 @@ impl Plane {
                     continue;
                 }
 
-                // Part 1
-                // let occupied = self.count_adjacent_occupied(i, j);
+                let occupied = self.count_adjacent_occupied(i, j);
 
-                // // Update seat
-                // self.swap_seats[i][j] = match (cell, occupied) {
-                //     (Cell::EMPTY, 0) => {
-                //         change = true;
-                //         Cell::OCCUPIED
-                //     }
-                //     (Cell::OCCUPIED, n) if n >= 4 => {
-                //         change = true;
-                //         Cell::EMPTY
-                //     }
-                //     _ => *cell,
-                // }
+                // Update seat
+                self.swap_seats[i][j] = match (cell, occupied) {
+                    (Cell::EMPTY, 0) => {
+                        change = true;
+                        Cell::OCCUPIED
+                    }
+                    (Cell::OCCUPIED, n) if n >= 4 => {
+                        change = true;
+                        Cell::EMPTY
+                    }
+                    _ => *cell,
+                }
+            }
+        }
 
-                // Part 2
+        // Swap the buffers
+        swap(&mut self.seats, &mut self.swap_seats);
+
+        change
+    }
+
+    pub fn tick_part2(&mut self) -> bool {
+        // Track if anything changed
+        let mut change = false;
+
+        // Write next tick into new_seats
+        for (i, row) in self.seats.iter().enumerate() {
+            for (j, cell) in row.iter().enumerate() {
+                if *cell == Cell::FLOOR {
+                    continue;
+                }
+
                 let occupied = self.count_visible_occupied(i, j);
 
                 // Update seat
@@ -162,9 +179,12 @@ fn main() {
 
     let contents = fs::read_to_string(filename).expect("Failed to read file");
 
-    let mut plane = Plane::from_input(&contents);
+    let mut plane_part1 = Plane::from_input(&contents);
 
-    while plane.tick() {}
+    while plane_part1.tick_part1() {}
+    println!("Occupied seats: {}", plane_part1.num_occupied_seats());
 
-    println!("Occupied seats: {}", plane.num_occupied_seats());
+    let mut plane_part2 = Plane::from_input(&contents);
+    while plane_part2.tick_part2() {}
+    println!("Occupied seats: {}", plane_part2.num_occupied_seats());
 }
