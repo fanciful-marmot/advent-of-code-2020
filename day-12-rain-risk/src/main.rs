@@ -116,6 +116,34 @@ fn main() {
 
     let contents = fs::read_to_string(filename).expect("Failed to read file");
 
+    // Part 1
+    let mut ship = Ship::new();
+    contents.lines().for_each(|line| {
+        let command_letter = &line[0..1];
+        let value = line[1..].parse::<i32>().unwrap();
+
+        match command_letter {
+            "N" => ship.absolute_move(Direction::NORTH, value),
+            "S" => ship.absolute_move(Direction::SOUTH, value),
+            "E" => ship.absolute_move(Direction::EAST, value),
+            "W" => ship.absolute_move(Direction::WEST, value),
+            "L" => ship.turn(RelativeDirection::CCW, value as u32),
+            "R" => ship.turn(RelativeDirection::CW, value as u32),
+            "F" => ship.relative_move(value),
+            _ => {
+                eprintln!("Unexpected command: {}", command_letter);
+                unreachable!();
+            }
+        }
+    });
+    println!("PART 1");
+    println!("Ship is at ({}, {})", ship.position.0, ship.position.1);
+    println!(
+        "Manhattan distance: {}",
+        ship.position.0.abs() + ship.position.1.abs()
+    );
+
+    // Part 2
     let mut ship = Ship::new();
     let mut waypoint = Waypoint::new();
 
@@ -123,22 +151,6 @@ fn main() {
         let command_letter = &line[0..1];
         let value = line[1..].parse::<i32>().unwrap();
 
-        // Part 1
-        // match command_letter {
-        //     "N" => ship.absolute_move(Direction::NORTH, value),
-        //     "S" => ship.absolute_move(Direction::SOUTH, value),
-        //     "E" => ship.absolute_move(Direction::EAST, value),
-        //     "W" => ship.absolute_move(Direction::WEST, value),
-        //     "L" => ship.turn(RelativeDirection::CCW, value as u32),
-        //     "R" => ship.turn(RelativeDirection::CW, value as u32),
-        //     "F" => ship.relative_move(value),
-        //     _ => {
-        //         eprintln!("Unexpected command: {}", command_letter);
-        //         unreachable!();
-        //     }
-        // }
-
-        // Part 2
         match command_letter {
             "N" => waypoint.absolute_move(Direction::NORTH, value),
             "S" => waypoint.absolute_move(Direction::SOUTH, value),
@@ -154,12 +166,13 @@ fn main() {
         }
     });
 
+    println!("");
+    println!("PART 2");
     println!(
         "Waypoint is at ({}, {})",
         waypoint.position.0, waypoint.position.1
     );
     println!("Ship is at ({}, {})", ship.position.0, ship.position.1);
-
     println!(
         "Manhattan distance: {}",
         ship.position.0.abs() + ship.position.1.abs()
